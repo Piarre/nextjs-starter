@@ -20,7 +20,6 @@ import { ChevronRightIcon, Copy } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import { motion } from "framer-motion";
-import CheckboxField from "@/components/field";
 
 const CLIs = ["npm", "yarn", "pnpm", "bun"] as const;
 export type CLI = (typeof CLIs)[number];
