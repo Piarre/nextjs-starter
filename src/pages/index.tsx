@@ -20,6 +20,8 @@ import { ChevronRightIcon, Copy } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import { motion } from "framer-motion";
+import RegEx from "@/lib/data/regex";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 const CLIs = ["npm", "yarn", "pnpm", "bun"] as const;
 export type CLI = (typeof CLIs)[number];
@@ -229,6 +231,8 @@ export default function Home() {
             </div>
             <div className="flex w-full items-center gap-2 min-h-28">
               <Textarea disabled value={command} className="resize-none" />
+              <Tooltip>
+                <TooltipTrigger asChild>
               <Button
                 size={"icon"}
                 type="button"
@@ -237,6 +241,9 @@ export default function Home() {
               >
                 <Copy className="size-4" />
               </Button>
+                </TooltipTrigger>
+                <TooltipContent>Copy command</TooltipContent>
+              </Tooltip>
             </div>
             <div className="w-full">
               <Button type="submit" className="w-full">

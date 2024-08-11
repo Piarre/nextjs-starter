@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { GeistSans } from "geist/font/sans";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -11,7 +12,9 @@ export default function App({ Component, pageProps }: AppProps) {
       className={cn("min-h-screen bg-background font-sans antialiased", GeistSans.variable)}
     >
       <ThemeProvider attribute="class" defaultTheme="light">
-        <Component {...pageProps} />
+        <TooltipProvider delayDuration={0}>
+          <Component {...pageProps} />
+        </TooltipProvider>
       </ThemeProvider>
     </main>
   );
