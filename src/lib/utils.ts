@@ -33,10 +33,10 @@ export const CreateCommand = ({
   return `${getCLIX(cli)} 
   ${name} 
   --${lang} 
-  ${tailwind ? "--tailwind" : ""}
-  ${eslint ? "--eslint" : ""}
-  ${app ? "--app" : ""}
-  ${srcDir ? "--src-dir" : ""} 
+  ${tailwind ? "--tailwind" : "--no-tailwind"}
+  ${eslint ? "--eslint" : "--no-eslint"}
+  ${app ? "--app" : "--no-app"}
+  ${srcDir ? "--src-dir" : "--no-src-dir"} 
   --import-alias \"${importAlias}\" 
   --use-${cli}`
     .replace(/\n/g, "")
