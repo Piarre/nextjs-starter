@@ -3,9 +3,7 @@ import { twMerge } from "tailwind-merge";
 import { NextOptions } from "./types/next";
 import { CLI } from "@/pages";
 
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
+export const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs));
 
 const getCLIX = (cli: CLI) => {
   switch (cli) {
