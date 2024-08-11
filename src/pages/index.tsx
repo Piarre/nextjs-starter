@@ -16,7 +16,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useEffect, useState } from "react";
 import { cn, CreateCommand } from "@/lib/utils";
-import { ChevronRightIcon, Copy } from "lucide-react";
+import { ChevronRightIcon, Copy, RotateCcw } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import { motion } from "framer-motion";
@@ -46,16 +46,16 @@ export default function Home() {
   const [isAdvanced, setIsAdvanced] = useState<boolean>(false);
 
   const formSchema = z.object({
-    name: z
-      .string()
-      .regex(/^(?:(?:@(?:[a-z0-9-*~][a-z0-9-*._~]*)?\/[a-z0-9-._~])|[a-z0-9-~])[a-z0-9-._~]*$/, {
-        message: "Invalid app name. Must be a valid npm package name.",
-      }),
+    name: z.string().regex(RegEx.name, {
+      message: "Invalid app name. Must be a valid npm package name.",
+    }),
     tailwind: z.boolean(),
     eslint: z.boolean(),
     app: z.boolean(),
     srcDir: z.boolean(),
-    importAlias: z.string(),
+    importAlias: z.string().regex(RegEx.importAlias, {
+      message: "Invalid import alias. Must be a valid import alias.",
+    }),
     lang: z.union([z.literal("ts"), z.literal("js")]),
     cli: z.enum(CLIs),
     shadcnUi: z.boolean(),
@@ -64,7 +64,7 @@ export default function Home() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "myApp",
+      name: "my-app",
       tailwind: true,
       eslint: true,
       app: false,
@@ -135,6 +135,7 @@ export default function Home() {
               )}
             />
             <div>
+              <FormLabel>Features</FormLabel>
               {Items.map(({ name, label, description }, x) => (
                 <FormField
                   key={x}
@@ -153,6 +154,34 @@ export default function Home() {
                   )}
                 />
               ))}
+              <FormField
+                control={form.control}
+                name="importAlias"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Import alias</FormLabel>
+                    <FormControl aria-autocomplete="none" className="w-full">
+                      <div className="flex w-full items-center gap-2">
+                        <Input aria-autocomplete="none" type="text" {...field} />
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              size={"icon"}
+                              type="button"
+                              variant={"outline"}
+                              onClick={() => form.setValue("importAlias", "@/*")}
+                            >
+                              <RotateCcw className="size-4" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>Reset</TooltipContent>
+                        </Tooltip>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
             <FormField
               control={form.control}
@@ -233,14 +262,14 @@ export default function Home() {
               <Textarea disabled value={command} className="resize-none" />
               <Tooltip>
                 <TooltipTrigger asChild>
-              <Button
-                size={"icon"}
-                type="button"
-                variant={"outline"}
-                onClick={() => navigator.clipboard.writeText(command)}
-              >
-                <Copy className="size-4" />
-              </Button>
+                  <Button
+                    size={"icon"}
+                    type="button"
+                    variant={"outline"}
+                    onClick={() => navigator.clipboard.writeText(command)}
+                  >
+                    <Copy className="size-4" />
+                  </Button>
                 </TooltipTrigger>
                 <TooltipContent>Copy command</TooltipContent>
               </Tooltip>
