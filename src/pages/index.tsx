@@ -69,7 +69,7 @@ export default function Home() {
     setCommand(CreateCommand(values));
 
   return (
-    <div className="w-full h-screen flex py-6 sm:py-12 px-6">
+    <div className="w-full flex py-6 sm:py-12 px-6">
       <div className="w-full">
         <div className="max-w-2xl mx-auto">
           <div className="flex justify-center items-center pb-4">
