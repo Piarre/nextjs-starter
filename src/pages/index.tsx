@@ -13,14 +13,11 @@ import { Input } from "@/components/ui/input";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Checkbox } from "@/components/ui/checkbox";
 import { useEffect, useState } from "react";
 import { cn, CreateCommand } from "@/lib/utils";
 import { ChevronRightIcon, Copy, RotateCcw } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
-import { Separator } from "@/components/ui/separator";
 import { motion } from "framer-motion";
-import RegEx from "@/lib/data/regex";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { CLIs } from "@/lib/types/next";
 import { NextStarterFormSchema } from "@/lib/data/form";
@@ -45,24 +42,8 @@ export default function Home() {
   const [command, setCommand] = useState<string>("");
   const [isAdvanced, setIsAdvanced] = useState<boolean>(false);
 
-  const formSchema = z.object({
-    name: z.string().regex(RegEx.name, {
-      message: "Invalid app name. Must be a valid npm package name.",
-    }),
-    tailwind: z.boolean(),
-    eslint: z.boolean(),
-    app: z.boolean(),
-    srcDir: z.boolean(),
-    importAlias: z.string().regex(RegEx.importAlias, {
-      message: "Invalid import alias. Must be a valid import alias.",
-    }),
-    lang: z.union([z.literal("ts"), z.literal("js")]),
-    cli: z.enum(CLIs),
-    shadcnUi: z.boolean(),
-  });
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof NextStarterFormSchema>>({
+    resolver: zodResolver(NextStarterFormSchema),
     defaultValues: {
       name: "my-app",
       tailwind: true,
@@ -71,6 +52,7 @@ export default function Home() {
       importAlias: "@/*",
       srcDir: true,
       lang: "ts",
+      skipInstall: false,
       cli: "npm",
       shadcnUi: false,
     },
@@ -81,9 +63,8 @@ export default function Home() {
     form.watch((value) => setCommand(CreateCommand(value as any)));
   }, [form]);
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  const onSubmit = (values: z.infer<typeof NextStarterFormSchema>) =>
     setCommand(CreateCommand(values));
-  }
 
   return (
     <>

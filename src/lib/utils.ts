@@ -1,7 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { NextOptions } from "./types/next";
-import { CLI } from "@/pages";
+import { CLI, NextOptions } from "./types/next";
 
 export const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs));
 
@@ -27,6 +26,7 @@ export const CreateCommand = ({
   name,
   srcDir,
   tailwind,
+  skipInstall,
 }: NextOptions): string => {
   return `${getCLIX(cli)} 
   ${name} 
@@ -35,7 +35,8 @@ export const CreateCommand = ({
   ${eslint ? "--eslint" : "--no-eslint"}
   ${app ? "--app" : "--no-app"}
   ${srcDir ? "--src-dir" : "--no-src-dir"} 
-  --import-alias \"${importAlias}\" 
+  --import-alias "${importAlias}" 
+  ${skipInstall ? "--skip-install" : ""}
   --use-${cli}`
     .replace(/\n/g, "")
     .replace(/\s+/g, " ");

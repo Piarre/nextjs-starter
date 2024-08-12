@@ -1,15 +1,9 @@
-import { CLI } from "@/pages";
+import { z } from "zod";
+import { NextStarterFormSchema } from "../data/form";
 
-type Options = {
-  name: string;
-  lang: "ts" | "js";
-  tailwind: boolean;
-  eslint: boolean;
-  app: boolean;
-  srcDir: boolean;
-  importAlias: string;
-  cli: CLI;
-  shadcnUi: boolean;
-};
+type Options = z.infer<typeof NextStarterFormSchema>;
 
-export { type Options as NextOptions };
+const CLIs = ["npm", "yarn", "pnpm", "bun"] as const;
+type CLI = (typeof CLIs)[number];
+
+export { type Options as NextOptions, CLIs, type CLI };
