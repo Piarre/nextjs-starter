@@ -22,9 +22,9 @@ import { Separator } from "@/components/ui/separator";
 import { motion } from "framer-motion";
 import RegEx from "@/lib/data/regex";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-
-const CLIs = ["npm", "yarn", "pnpm", "bun"] as const;
-export type CLI = (typeof CLIs)[number];
+import { CLIs } from "@/lib/types/next";
+import { NextStarterFormSchema } from "@/lib/data/form";
+import CheckboxFormField from "@/components/checkbox-form-field";
 
 const Items = [
   { name: "app", label: "App", description: "Initialize as an App Router project." },
@@ -39,7 +39,7 @@ const Items = [
     description: "Initialize with Tailwind CSS config. (Default)",
   },
   { name: "eslint", label: "ESLint", description: "Initialize with ESLint config" },
-];
+] as const;
 
 export default function Home() {
   const [command, setCommand] = useState<string>("");
@@ -137,21 +137,12 @@ export default function Home() {
             <div>
               <FormLabel>Features</FormLabel>
               {Items.map(({ name, label, description }, x) => (
-                <FormField
+                <CheckboxFormField
                   key={x}
-                  control={form.control}
-                  name={name as any}
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md py-2">
-                      <FormControl>
-                        <Checkbox checked={field.value} onCheckedChange={field.onChange} />
-                      </FormControl>
-                      <div className="space-y-1 leading-none">
-                        <FormLabel>{label}</FormLabel>
-                        <FormDescription>{description}</FormDescription>
-                      </div>
-                    </FormItem>
-                  )}
+                  name={name}
+                  description={description}
+                  label={label}
+                  form={form}
                 />
               ))}
               <FormField
@@ -239,22 +230,18 @@ export default function Home() {
                 }}
                 className="mt-2 text-xs sm:text-sm"
               >
-                <FormField
-                  control={form.control}
-                  name={"shadcnUi"}
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md py-2">
-                      <FormControl>
-                        <Checkbox checked={field.value} onCheckedChange={field.onChange} disabled />
-                      </FormControl>
-                      <div className="space-y-1 leading-none">
-                        <FormLabel className="text-secondary">Add Shadcn/UI</FormLabel>
-                        <FormDescription className="text-secondary">
-                          Implementing Next Themes
-                        </FormDescription>
-                      </div>
-                    </FormItem>
-                  )}
+                <CheckboxFormField
+                  name="shadcnUi"
+                  description={"Implementing Next Themes"}
+                  label={"Add Shadcn/UI"}
+                  form={form}
+                  disabled
+                />
+                <CheckboxFormField
+                  name="skipInstall"
+                  description={"Skip installing dependencies"}
+                  label={"Skip install"}
+                  form={form}
                 />
               </motion.div>
             </div>
