@@ -36,11 +36,6 @@ const Items = [
     label: "Source directory (src)",
     description: "Initialize with a src directory.",
   },
-  {
-    name: "tailwind",
-    label: "Tailwind",
-    description: "Initialize with Tailwind CSS config. (Default)",
-  },
   { name: "eslint", label: "ESLint", description: "Initialize with ESLint config" },
 ] as const;
 
@@ -91,7 +86,7 @@ export default function Home() {
 
   return (
     <div className="w-full flex py-6 sm:py-12 px-6">
-      <div className="w-full">
+      <div className="w-full md:px-8">
         <div className="max-w-2xl mx-auto">
           <div className="flex justify-center items-center pb-4">
             <h1 className="text-4xl font-bold">Kepa&apos;s starter</h1>
@@ -150,6 +145,13 @@ export default function Home() {
                     form={form}
                   />
                 ))}
+                <CheckboxFormField
+                  name="tailwind"
+                  label={"TailwindCSS"}
+                  description={"Initialize with Tailwind CSS config. (Default)"}
+                  form={form}
+                  onChange={(e) => !e && form.setValue("shadcnUi", false)}
+                />
                 <FormField
                   control={form.control}
                   name="importAlias"
@@ -236,15 +238,15 @@ export default function Home() {
                 >
                   <CheckboxFormField
                     name="shadcnUi"
-                    description={"Implementing Next Themes"}
                     label={"Add Shadcn/UI"}
+                    description={"Implementing Next Themes"}
                     form={form}
-                    disabled
+                    onChange={(e) => e && form.setValue("tailwind", true)}
                   />
                   <CheckboxFormField
                     name="skipInstall"
-                    description={"Skip installing dependencies"}
                     label={"Skip install"}
+                    description={"Skip installing dependencies"}
                     form={form}
                   />
                 </motion.div>
@@ -274,7 +276,7 @@ export default function Home() {
           </Form>
         </div>
       </div>
-      <div className="w-1/3">
+      <div className="w-1/3 hidden md:block">
         <Tree
           initialExpandedItems={Array.from({ length: 31 }, (_, i) => i.toString())}
           className="font-medium"

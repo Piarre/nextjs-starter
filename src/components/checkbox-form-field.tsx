@@ -12,6 +12,7 @@ interface CheckboxFormFieldProps {
   description: string;
   form: UseFormReturn<z.infer<typeof NextStarterFormSchema>>;
   disabled?: boolean;
+  onChange?: (e?: CheckedState) => void;
 }
 
 const CheckboxFormField = ({
@@ -20,6 +21,7 @@ const CheckboxFormField = ({
   description,
   form,
   disabled = false,
+  onChange,
 }: CheckboxFormFieldProps) => {
   return (
     <FormField
@@ -30,7 +32,10 @@ const CheckboxFormField = ({
           <FormControl>
             <Checkbox
               checked={field.value as CheckedState}
-              onCheckedChange={field.onChange}
+              onCheckedChange={(e) => {
+                field.onChange(e);
+                onChange?.(e);
+              }}
               disabled={disabled}
             />
           </FormControl>
