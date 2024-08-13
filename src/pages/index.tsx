@@ -23,9 +23,11 @@ import { CLIs } from "@/lib/types/next";
 import { NextStarterFormSchema } from "@/lib/data/form";
 import CheckboxFormField from "@/components/checkbox-form-field";
 import { Tree } from "@/components/magicui/file-tree";
-import { NextFileTree } from "@/lib/data/file-tree";
 import regex from "@/lib/data/regex";
 import Dock from "@/components/dock";
+import { useLocalStorage } from "usehooks-ts";
+import { defaultSettings, Settings } from "@/lib/types/settings";
+import { NextFileTree } from "@/components/next-file-tree";
 
 const Items = [
   { name: "app", label: "App", description: "Initialize as an App Router project." },
@@ -46,20 +48,14 @@ export default function Home() {
   const [command, setCommand] = useState<string>("");
   const [isAdvanced, setIsAdvanced] = useState<boolean>(false);
 
+  const [settings, setSettings] = useLocalStorage<Omit<Settings, "name">>(
+    "settings",
+    defaultSettings,
+  );
+
   const form = useForm<z.infer<typeof NextStarterFormSchema>>({
     resolver: zodResolver(NextStarterFormSchema),
-    defaultValues: {
-      name: "my-app",
-      tailwind: true,
-      eslint: true,
-      app: false,
-      importAlias: "@/*",
-      srcDir: true,
-      lang: "ts",
-      skipInstall: false,
-      cli: "npm",
-      shadcnUi: false,
-    },
+    defaultValues: settings ?? defaultSettings,
   });
 
   useEffect(() => {
@@ -81,9 +77,14 @@ export default function Home() {
             message: "Invalid import alias. Must be a valid import alias.",
           });
 
+      for (const key in value) {
+        if (key == "name" || key == "importAlias") continue;
+        setSettings((prev) => ({ ...prev, [key]: (value as any)[key] }));
+      }
+
       setCommand(CreateCommand(value as any));
     });
-  }, [form]);
+  }, [form, setSettings]);
 
   const onSubmit = (values: z.infer<typeof NextStarterFormSchema>) =>
     setCommand(CreateCommand(values));
