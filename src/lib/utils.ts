@@ -4,7 +4,7 @@ import { CLI, NextOptions } from "./types/next";
 
 export const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs));
 
-const getCLIX = (cli: CLI) => {
+const getNextCmd = (cli: CLI) => {
   switch (cli) {
     case "npm":
       return "npx create-next-app@latest";
@@ -14,6 +14,17 @@ const getCLIX = (cli: CLI) => {
       return "pnpm create next-app";
     case "bun":
       return "bun create next-app";
+  }
+};
+
+const getShadcnCmd = (cli: CLI) => {
+  switch (cli) {
+    case "pnpm":
+      return "pnpm dlx shadcn-ui@latest init";
+    case "bun":
+      return "bunx --bun shadcn-ui@latest init";
+    default:
+      return "npx shadcn-ui@latest init";
   }
 };
 
@@ -28,7 +39,7 @@ export const CreateCommand = ({
   tailwind,
   skipInstall,
 }: NextOptions): string => {
-  return `${getCLIX(cli)} 
+  return `${getNextCmd(cli)} 
   ${name} 
   --${lang} 
   ${tailwind ? "--tailwind" : "--no-tailwind"}
@@ -37,7 +48,9 @@ export const CreateCommand = ({
   ${srcDir ? "--src-dir" : "--no-src-dir"} 
   --import-alias "${importAlias}" 
   ${skipInstall ? "--skip-install" : ""}
-  --use-${cli}`
+  --use-${cli}
+  && cd ${name}/
+  && ${getShadcnCmd(cli)}`
     .replace(/\n/g, "")
     .replace(/\s+/g, " ");
 };
