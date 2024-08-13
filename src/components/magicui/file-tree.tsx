@@ -191,19 +191,27 @@ type FolderProps = {
   element: string;
   isSelectable?: boolean;
   isSelect?: boolean;
+} & {
+  openIcon?: React.ReactNode;
+  closeIcon?: React.ReactNode;
 } & FolderComponentProps;
 
 const Folder = forwardRef<HTMLDivElement, FolderProps & React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, element, value, isSelectable = true, isSelect, children, ...props }, ref) => {
-    const {
-      direction,
-      handleExpand,
-      expandedItems,
-      indicator,
-      setExpandedItems,
+  (
+    {
+      className,
+      element,
+      value,
+      isSelectable = true,
+      isSelect,
+      children,
       openIcon,
       closeIcon,
-    } = useTree();
+      ...props
+    },
+    ref,
+  ) => {
+    const { direction, handleExpand, expandedItems, indicator, setExpandedItems } = useTree();
 
     return (
       <AccordionPrimitive.Item

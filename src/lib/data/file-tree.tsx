@@ -54,8 +54,13 @@ const AppContent = ({
     <>
       {app ? (
         <>
-          <Folder value="0" element="app">
-            <FileItem name="favicon.ico" id="1" />
+          <Folder
+            value="0"
+            element="app"
+            openIcon={<Icons.app.open />}
+            closeIcon={<Icons.app.closed />}
+          >
+            <FileItem name="favicon.ico" id={"1"} icon={<Icons.favicon />} />
             <FileItem name="globals.css" id="2" icon={<Icons.css />} />
             <FileItem
               name={extX("layout", lang)}
@@ -72,8 +77,18 @@ const AppContent = ({
         </>
       ) : (
         <>
-          <Folder value="6" element="pages">
-            <Folder value="7" element="api">
+          <Folder
+            value="6"
+            element="pages"
+            openIcon={<Icons.views.open />}
+            closeIcon={<Icons.views.closed />}
+          >
+            <Folder
+              value="7"
+              element="api"
+              openIcon={<Icons.api.open />}
+              closeIcon={<Icons.api.closed />}
+            >
               <FileItem
                 name={ext("hello", lang)}
                 id="8"
@@ -96,7 +111,12 @@ const AppContent = ({
               icon={lang == "js" ? <Icons.js /> : <Icons.tsx />}
             />
           </Folder>
-          <Folder value="14" element="styles">
+          <Folder
+            value="14"
+            element="styles"
+            openIcon={<Icons.cssFolder.open />}
+            closeIcon={<Icons.cssFolder.closed />}
+          >
             <FileItem name="globals.css" id="12" icon={<Icons.css />} />
             {!tailwind && <FileItem name="Home.module.css" id="13" icon={<Icons.css />} />}
           </Folder>
@@ -117,14 +137,24 @@ export const NextFileTree = ({
   shadcUi,
 }: NextFileTreeProps) => {
   return (
-    <Folder element={name} value="15">
-      <Folder value="16" element="public">
+    <Folder element={name} value="15" className="truncate max-w-48">
+      <Folder
+        value="16"
+        element="public"
+        openIcon={<Icons.public.open />}
+        closeIcon={<Icons.public.closed />}
+      >
         {!app && <FileItem name="favicon.ico" id="17" icon={<Icons.favicon />} />}
         <FileItem name="next.svg" id="18" icon={<Icons.svg />} />
         <FileItem name="vercel.svg" id="19" icon={<Icons.svg />} />
       </Folder>
       {srcDir ? (
-        <Folder value="20" element="src">
+        <Folder
+          value="20"
+          element="src"
+          openIcon={<Icons.src.open />}
+          closeIcon={<Icons.src.closed />}
+        >
           <AppContent app={app} tailwind={tailwind} lang={lang} />
         </Folder>
       ) : (
@@ -143,9 +173,9 @@ export const NextFileTree = ({
         <FileItem name={ext("tailwind.config", lang)} id="29" icon={<Icons.tailwind />} />
       )}
       {lang == "js" ? (
-        <FileItem name="tsconfig.json" id="30" icon={<Icons.tsconfig />} />
-      ) : (
         <FileItem name="jsconfig.json" id="30" icon={<Icons.jsconfig />} />
+      ) : (
+        <FileItem name="tsconfig.json" id="30" icon={<Icons.tsconfig />} />
       )}
     </Folder>
   );
