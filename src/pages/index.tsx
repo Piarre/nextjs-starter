@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { cn, CreateCommand } from "@/lib/utils";
 import { ChevronRightIcon, Copy, RotateCcw } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
@@ -24,6 +24,7 @@ import { NextStarterFormSchema } from "@/lib/data/form";
 import CheckboxFormField from "@/components/checkbox-form-field";
 import { Tree } from "@/components/magicui/file-tree";
 import { NextFileTree } from "@/lib/data/file-tree";
+import regex from "@/lib/data/regex";
 
 const Items = [
   { name: "app", label: "App", description: "Initialize as an App Router project." },
@@ -61,8 +62,26 @@ export default function Home() {
   });
 
   useEffect(() => {
-    setCommand(CreateCommand(form.getValues()));
-    form.watch((value) => setCommand(CreateCommand(value as any)));
+    const formValues = form.getValues();
+
+    setCommand(CreateCommand(formValues));
+
+    form.watch((value) => {
+      const appNameValue = formValues.name;
+      const importAliasValue = formValues.importAlias;
+
+      appNameValue.match(regex.name)
+        ? form.clearErrors("name")
+        : form.setError("name", { message: "Invalid app name. Must be a valid npm package name." });
+
+      importAliasValue.match(regex.importAlias)
+        ? form.clearErrors("importAlias")
+        : form.setError("importAlias", {
+            message: "Invalid import alias. Must be a valid import alias.",
+          });
+
+      setCommand(CreateCommand(value as any));
+    });
   }, [form]);
 
   const onSubmit = (values: z.infer<typeof NextStarterFormSchema>) =>
@@ -205,7 +224,6 @@ export default function Home() {
                   initial={{ opacity: 0, height: 0 }}
                   animate={{
                     opacity: isAdvanced ? 1 : 0,
-
                     height: isAdvanced ? "auto" : 0,
                   }}
                   transition={{
@@ -229,7 +247,7 @@ export default function Home() {
                   />
                 </motion.div>
               </div>
-              <div className="flex w-full items-center gap-2 min-h-28">
+              <div className="flex w-full items-center gap-2 min-h-28 relative">
                 <Textarea disabled value={command} className="resize-none" />
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -255,7 +273,10 @@ export default function Home() {
         </div>
       </div>
       <div className="w-1/3">
-        <Tree initialExpandedItems={Array.from({ length: 31 }, (_, i) => i.toString())}>
+        <Tree
+          initialExpandedItems={Array.from({ length: 31 }, (_, i) => i.toString())}
+          className="font-medium"
+        >
           <NextFileTree
             name={form.getValues().name}
             lang={form.getValues().lang}
