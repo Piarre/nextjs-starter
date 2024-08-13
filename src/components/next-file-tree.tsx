@@ -1,18 +1,7 @@
 import { File, Folder } from "@/components/magicui/file-tree";
-import { CLI } from "../types/next";
+import { CLI, NextFileTreeProps } from "../lib/types/next";
 import { ReactNode } from "react";
 import Icons from "@/components/ui/icons";
-
-interface NextFileTreeProps {
-  name: string;
-  eslint?: boolean;
-  tailwind?: boolean;
-  srcDir?: boolean;
-  app?: boolean;
-  cli?: CLI;
-  lang: "js" | "ts";
-  shadcUi?: boolean;
-}
 
 const ext = (value: string, lang: "js" | "ts") => `${value}.${lang}`;
 const extX = (value: string, lang: "js" | "ts") => `${value}.${lang == "js" ? "js" : "tsx"}`;
@@ -45,11 +34,41 @@ const LockFileItem = ({ cli }: { cli: CLI }) => {
       return <FileItem name="package-lock.json" id="9" icon={<Icons.node />} />;
   }
 };
+
+const ShadcnUIContent = ({ shadcUi, lang }: Pick<NextFileTreeProps, "lang" | "shadcUi">) => {
+  return (
+    shadcUi && (
+      <>
+        <Folder
+          value="34"
+          element="components"
+          openIcon={<Icons.components.open />}
+          closeIcon={<Icons.components.closed />}
+          isSelectable={false}
+        />
+        <Folder
+          value="32"
+          element="lib"
+          openIcon={<Icons.lib.open />}
+          closeIcon={<Icons.lib.closed />}
+        >
+          <FileItem
+            name={ext("utils", lang)}
+            icon={lang == "js" ? <Icons.js /> : <Icons.ts />}
+            id="33"
+          />
+        </Folder>
+      </>
+    )
+  );
+};
+
 const AppContent = ({
   app,
   tailwind,
   lang,
-}: Pick<NextFileTreeProps, "app" | "tailwind" | "lang">) => {
+  shadcUi,
+}: Pick<NextFileTreeProps, "app" | "tailwind" | "lang" | "shadcUi">) => {
   return (
     <>
       {app ? (
@@ -74,9 +93,11 @@ const AppContent = ({
               icon={lang == "js" ? <Icons.js /> : <Icons.tsx />}
             />
           </Folder>
+          <ShadcnUIContent shadcUi={shadcUi} lang={lang} />
         </>
       ) : (
         <>
+          <ShadcnUIContent shadcUi={shadcUi} lang={lang} />
           <Folder
             value="6"
             element="pages"
@@ -155,15 +176,15 @@ export const NextFileTree = ({
           openIcon={<Icons.src.open />}
           closeIcon={<Icons.src.closed />}
         >
-          <AppContent app={app} tailwind={tailwind} lang={lang} />
+          <AppContent app={app} tailwind={tailwind} lang={lang} shadcUi={shadcUi} />
         </Folder>
       ) : (
-        <AppContent app={app} tailwind={tailwind} lang={lang} />
+        <AppContent app={app} tailwind={tailwind} lang={lang} shadcUi={shadcUi} />
       )}
       {eslint && <FileItem name=".eslintrc.json" id="21" icon={<Icons.eslint />} />}
       <FileItem name=".gitignore" id="22" icon={<Icons.git />} />
       <LockFileItem cli={cli} />
-      {shadcUi && <FileItem name="components.json" id="23" />}
+      {shadcUi && <FileItem name="components.json" icon={<Icons.json />} id="23" />}
       {lang == "ts" && <FileItem name="next-env.d.ts" id="24" icon={<Icons.tsDef />} />}
       <FileItem name="next.config.mjs" id="25" icon={<Icons.next />} />
       <FileItem name="package.json" id="26" icon={<Icons.node />} />
