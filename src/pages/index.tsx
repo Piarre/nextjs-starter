@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { cn, CreateCommand } from "@/lib/utils";
 import { ChevronRightIcon, Copy, RotateCcw } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
@@ -25,6 +25,7 @@ import CheckboxFormField from "@/components/checkbox-form-field";
 import { Tree } from "@/components/magicui/file-tree";
 import { NextFileTree } from "@/lib/data/file-tree";
 import regex from "@/lib/data/regex";
+import Dock from "@/components/dock";
 
 const Items = [
   { name: "app", label: "App", description: "Initialize as an App Router project." },
@@ -289,6 +290,7 @@ export default function Home() {
           />
         </Tree>
       </div>
+      <Dock />
     </div>
   );
 }
