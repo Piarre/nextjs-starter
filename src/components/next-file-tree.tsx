@@ -1,7 +1,8 @@
 import { File, Folder } from "@/components/magicui/file-tree";
-import { CLI, NextFileTreeProps } from "../lib/types/next";
+import { NextFileTreeProps } from "../lib/types/next";
 import { ReactNode } from "react";
 import Icons from "@/components/ui/icons";
+import { CLI } from "@/lib/types/cli";
 
 const ext = (value: string, lang: "js" | "ts") => `${value}.${lang}`;
 const extX = (value: string, lang: "js" | "ts") => `${value}.${lang == "js" ? "js" : "tsx"}`;

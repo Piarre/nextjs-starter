@@ -12,6 +12,7 @@ interface CheckboxFormFieldProps {
   description: string;
   form: UseFormReturn<z.infer<typeof NextStarterFormSchema>>;
   disabled?: boolean;
+  // eslint-disable-next-line no-unused-vars
   onChange?: (e?: CheckedState) => void;
 }
 
