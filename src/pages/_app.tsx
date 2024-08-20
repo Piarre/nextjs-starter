@@ -7,6 +7,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Head from "next/head";
 import { Metadata } from "next";
 import { Toaster } from "@/components/ui/sonner";
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 const metadata: Metadata = {
   title: "NextJS Starter",
@@ -54,6 +55,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <ThemeProvider attribute="class" defaultTheme="light">
         <TooltipProvider delayDuration={0}>
           <Component {...pageProps} />
+          <SpeedInsights />
           <Toaster richColors />
         </TooltipProvider>
       </ThemeProvider>
