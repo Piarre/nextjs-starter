@@ -6,6 +6,7 @@ import { GeistSans } from "geist/font/sans";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Head from "next/head";
 import { Metadata } from "next";
+import { Toaster } from "@/components/ui/sonner";
 
 const metadata: Metadata = {
   title: "NextJS Starter",
@@ -20,9 +21,11 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <main
       //  max-w-2xl mx-auto py-12 sm:py-24 px-6
+      suppressHydrationWarning
       className={cn("min-h-screen bg-background font-sans antialiased", GeistSans.variable)}
     >
       <Head>
+        <title>NextJS Starter</title>
         <meta
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no"
@@ -51,6 +54,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <ThemeProvider attribute="class" defaultTheme="light">
         <TooltipProvider delayDuration={0}>
           <Component {...pageProps} />
+          <Toaster richColors />
         </TooltipProvider>
       </ThemeProvider>
     </main>
