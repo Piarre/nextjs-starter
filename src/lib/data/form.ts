@@ -1,6 +1,6 @@
 import { z } from "zod";
 import regex from "./regex";
-import { CLIs } from "../types/next";
+import { CLIs } from "../types/cli";
 
 export const NextStarterFormSchema = z.object({
   name: z.string().min(1).regex(regex.name, {

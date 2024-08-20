@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { NextStarterFormSchema } from "../data/form";
+import { CLI } from "./cli";
 
 type Options = z.infer<typeof NextStarterFormSchema>;
 
@@ -14,7 +15,4 @@ interface NextFileTreeProps {
   shadcUi?: boolean;
 }
 
-const CLIs = ["npm", "yarn", "pnpm", "bun"] as const;
-type CLI = (typeof CLIs)[number];
-
-export { type Options as NextOptions, CLIs, type CLI, type NextFileTreeProps };
+export { type Options as NextOptions, type NextFileTreeProps };

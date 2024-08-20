@@ -1,32 +1,9 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { CLI, NextOptions } from "./types/next";
+import { NextOptions } from "./types/next";
+import { NextCMD, ShadcnCMD } from "./data/cli";
 
 export const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs));
-
-const getNextCmd = (cli: CLI) => {
-  switch (cli) {
-    case "npm":
-      return "npx create-next-app@latest";
-    case "yarn":
-      return "yarn create next-app";
-    case "pnpm":
-      return "pnpm create next-app";
-    case "bun":
-      return "bun create next-app";
-  }
-};
-
-const getShadcnCmd = (cli: CLI) => {
-  switch (cli) {
-    case "pnpm":
-      return "pnpm dlx shadcn-ui@latest init";
-    case "bun":
-      return "bunx --bun shadcn-ui@latest init";
-    default:
-      return "npx shadcn-ui@latest init";
-  }
-};
 
 export const CreateCommand = ({
   app,
@@ -38,8 +15,9 @@ export const CreateCommand = ({
   srcDir,
   tailwind,
   skipInstall,
+  shadcnUi,
 }: NextOptions): string => {
-  return `${getNextCmd(cli)} 
+  return `${NextCMD[cli]} 
   ${name} 
   --${lang} 
   ${tailwind ? "--tailwind" : "--no-tailwind"}
@@ -49,8 +27,12 @@ export const CreateCommand = ({
   --import-alias "${importAlias}" 
   ${skipInstall ? "--skip-install" : ""}
   --use-${cli}
-  && cd ${name}/
-  && ${getShadcnCmd(cli)}`
+  ${
+    shadcnUi
+      ? `&& cd ${name}/
+  && ${ShadcnCMD[cli]}`
+      : ""
+  }`
     .replace(/\n/g, "")
     .replace(/\s+/g, " ");
 };
