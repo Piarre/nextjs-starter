@@ -15,11 +15,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { cn, CreateCommand } from "@/lib/utils";
-import { ChevronRightIcon, Copy, RotateCcw } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { motion } from "framer-motion";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { CLIs } from "@/lib/types/next";
 import { NextStarterFormSchema } from "@/lib/data/form";
 import CheckboxFormField from "@/components/checkbox-form-field";
 import { Tree } from "@/components/magicui/file-tree";
@@ -28,6 +26,9 @@ import Dock from "@/components/dock";
 import { useLocalStorage } from "usehooks-ts";
 import { defaultSettings, Settings } from "@/lib/types/settings";
 import { NextFileTree } from "@/components/next-file-tree";
+import { CLIs } from "@/lib/types/cli";
+import { toast } from "sonner";
+import { ChevronRightIcon, Copy, RotateCcw } from "lucide-react";
 
 const Items = [
   { name: "app", label: "App", description: "Initialize as an App Router project." },
@@ -42,6 +43,7 @@ const Items = [
 export default function Home() {
   const [command, setCommand] = useState<string>("");
   const [isAdvanced, setIsAdvanced] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [settings, setSettings] = useLocalStorage<Omit<Settings, "name">>(
     "settings",
@@ -81,15 +83,38 @@ export default function Home() {
     });
   }, [form, setSettings]);
 
-  const onSubmit = (values: z.infer<typeof NextStarterFormSchema>) =>
+  const onSubmit = async (values: z.infer<typeof NextStarterFormSchema>) => {
     setCommand(CreateCommand(values));
+    setIsLoading(true);
+    await fetch("https://next-starter-api.piarre.app/generate", {
+      method: "POST",
+      body: JSON.stringify(values),
+    })
+      .then((res) => res.json())
+      .then(({ link }) => {
+        setIsLoading(false);
+        toast.success("Successfully generated!", {
+          action: {
+            label: "Open",
+            onClick: () => window.open(link, "_blank"),
+          },
+          description: "Link available 5 minutes.",
+        });
+      })
+      .catch(() => {
+        setIsLoading(false);
+        toast.error("Failed to generate.");
+      });
+    setIsLoading(false);
+  };
 
   return (
-    <div className="w-full flex py-6 sm:py-12 px-6">
+    <div className="w-full flex py-6 sm:py-12 px-6 mb-10">
       <div className="w-full md:px-8">
         <div className="max-w-2xl mx-auto">
-          <div className="flex justify-center items-center pb-4">
+          <div className="grid justify-center items-center pb-4">
             <h1 className="text-4xl font-bold">Kepa&apos;s starter</h1>
+            <h3>Beta</h3>
           </div>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} autoComplete="off" className="space-y-4">
@@ -241,12 +266,18 @@ export default function Home() {
                     label={"Add Shadcn/UI"}
                     description={"Implementing Next Themes"}
                     form={form}
-                    onChange={(e) => e && form.setValue("tailwind", true)}
+                    onChange={(e) => {
+                      if (e) {
+                        form.setValue("tailwind", true);
+                        form.setValue("skipInstall", false);
+                      }
+                    }}
                   />
                   <CheckboxFormField
                     name="skipInstall"
                     label={"Skip install"}
                     description={"Skip installing dependencies"}
+                    disabled={form.getValues("shadcnUi")}
                     form={form}
                   />
                 </motion.div>
@@ -267,11 +298,13 @@ export default function Home() {
                   <TooltipContent>Copy command</TooltipContent>
                 </Tooltip>
               </div>
-              <div className="w-full">
-                <Button type="submit" className="w-full">
-                  Generate
-                </Button>
-              </div>
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className=" transition-all w-full flex mx-auto disabled:scale-90"
+              >
+                Generate
+              </Button>
             </form>
           </Form>
         </div>
