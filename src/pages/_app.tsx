@@ -7,7 +7,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Head from "next/head";
 import { Metadata } from "next";
 import { Toaster } from "@/components/ui/sonner";
-import { SpeedInsights } from '@vercel/speed-insights/next';
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const metadata: Metadata = {
   title: "NextJS Starter",
@@ -36,20 +36,23 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta name="description" content={metadata.description as string} />
         <meta name="keywords" content="discord, docker, bot, oxie" />
         <meta name="author" content="Oxie" />
-
         {/* Open Graph */}
         <meta property="og:title" content={metadata.title as string} />
         <meta property="og:description" content={metadata.description as string} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={metadata.openGraph?.url as string} />
-
         {/* Twitter */}
         {/* <meta name="twitter:card" content="summary" />
         <meta name="twitter:site" content="@Oxie" />
         <meta name="twitter:title" content="Oxie" />
         <meta name="twitter:description" content={metadata.description as string} />
         <meta name="twitter:image" content="https://start.piarre.app/" /> */}
-
+        
+        {/* Google Search Console */}
+        <meta
+          name="google-site-verification"
+          content="bnPWEQXFZctS9hm43R6sc812zj3ltpbwHqiLGg73Bnc"
+        />
         <link rel="shortcut icon" href="/favicon.ico" />
       </Head>
       <ThemeProvider attribute="class" defaultTheme="light">
