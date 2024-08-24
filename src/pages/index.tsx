@@ -16,7 +16,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { cn, CreateCommand } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
-import { motion } from "framer-motion";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { NextStarterFormSchema } from "@/lib/data/form";
 import CheckboxFormField from "@/components/checkbox-form-field";
@@ -29,6 +28,9 @@ import { NextFileTree } from "@/components/next-file-tree";
 import { CLIs } from "@/lib/types/cli";
 import { toast } from "sonner";
 import { ChevronRightIcon, Copy, RotateCcw } from "lucide-react";
+import BlurFade from "@/components/magicui/blur-fade";
+import DropdownDiv from "@/components/dropdown-div";
+import BlurFadeText from "@/components/magicui/blur-fade-text";
 
 const Items = [
   { name: "app", label: "App", description: "Initialize as an App Router project." },
@@ -113,8 +115,8 @@ export default function Home() {
       <div className="w-full md:px-8">
         <div className="max-w-2xl mx-auto">
           <div className="grid justify-center items-center pb-4">
-            <h1 className="text-4xl font-bold">Kepa&apos;s starter</h1>
-            <h3>Beta</h3>
+            <BlurFadeText text="Kepa's starter" className="text-4xl font-bold" />
+            <BlurFadeText  text="Beta" className="text-xl font-bold bg-primary" />
           </div>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} autoComplete="off" className="space-y-4">
@@ -123,9 +125,13 @@ export default function Home() {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>App name</FormLabel>
+                    <BlurFade delay={0.2}>
+                      <FormLabel>App name</FormLabel>
+                    </BlurFade>
                     <FormControl aria-autocomplete="none">
-                      <Input aria-autocomplete="none" type="text" {...field} />
+                      <BlurFade delay={0.3}>
+                        <Input aria-autocomplete="none" type="text" {...field} />
+                      </BlurFade>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -136,55 +142,68 @@ export default function Home() {
                 name="lang"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Language</FormLabel>
+                    <BlurFade delay={0.4}>
+                      <FormLabel>Language</FormLabel>
+                    </BlurFade>
                     <div className="flex gap-4 justify-evenly">
-                      <Button
-                        type="button"
-                        variant={form.getValues().lang == "js" ? "destructive" : "secondary"}
-                        onClick={() => form.setValue("lang", "js")}
-                        {...field}
-                      >
-                        JavaScript
-                      </Button>
-                      <Button
-                        type="button"
-                        variant={form.getValues().lang == "ts" ? "destructive" : "secondary"}
-                        onClick={() => form.setValue("lang", "ts")}
-                        {...field}
-                      >
-                        TypeScript
-                      </Button>
+                      <BlurFade delay={0.5}>
+                        <Button
+                          type="button"
+                          variant={form.getValues().lang == "js" ? "destructive" : "secondary"}
+                          onClick={() => form.setValue("lang", "js")}
+                          {...field}
+                        >
+                          JavaScript
+                        </Button>
+                      </BlurFade>
+                      <BlurFade delay={0.6}>
+                        <Button
+                          type="button"
+                          variant={form.getValues().lang == "ts" ? "destructive" : "secondary"}
+                          onClick={() => form.setValue("lang", "ts")}
+                          {...field}
+                        >
+                          TypeScript
+                        </Button>
+                      </BlurFade>
                     </div>
                     <FormMessage />
                   </FormItem>
                 )}
               />
               <div>
-                <FormLabel>Features</FormLabel>
+                <BlurFade delay={0.7}>
+                  <FormLabel>Features</FormLabel>
+                </BlurFade>
                 {Items.map(({ name, label, description }, x) => (
-                  <CheckboxFormField
-                    key={x}
-                    name={name}
-                    description={description}
-                    label={label}
-                    form={form}
-                  />
+                  <BlurFade key={x} delay={0.7 + (x + 1) / 10}>
+                    <CheckboxFormField
+                      name={name}
+                      description={description}
+                      label={label}
+                      form={form}
+                    />
+                  </BlurFade>
                 ))}
-                <CheckboxFormField
-                  name="tailwind"
-                  label={"TailwindCSS"}
-                  description={"Initialize with Tailwind CSS config. (Default)"}
-                  form={form}
-                  onChange={(e) => !e && form.setValue("shadcnUi", false)}
-                />
+                <BlurFade delay={1}>
+                  <CheckboxFormField
+                    name="tailwind"
+                    label={"TailwindCSS"}
+                    description={"Initialize with Tailwind CSS config. (Default)"}
+                    form={form}
+                    onChange={(e) => !e && form.setValue("shadcnUi", false)}
+                  />
+                </BlurFade>
                 <FormField
                   control={form.control}
                   name="importAlias"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Import alias</FormLabel>
+                      <BlurFade delay={1.1}>
+                        <FormLabel>Import alias</FormLabel>
+                      </BlurFade>
                       <FormControl aria-autocomplete="none" className="w-full">
-                        <div className="flex w-full items-center gap-2">
+                        <BlurFade className="flex w-full items-center gap-2" delay={1.2}>
                           <Input aria-autocomplete="none" type="text" {...field} />
                           <Tooltip>
                             <TooltipTrigger asChild>
@@ -199,7 +218,7 @@ export default function Home() {
                             </TooltipTrigger>
                             <TooltipContent>Reset</TooltipContent>
                           </Tooltip>
-                        </div>
+                        </BlurFade>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -211,21 +230,26 @@ export default function Home() {
                 name="cli"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>CLI</FormLabel>
-                    <FormDescription>Choose your package manager.</FormDescription>
+                    <BlurFade delay={1.3}>
+                      <FormLabel>CLI</FormLabel>
+                    </BlurFade>
+                    <BlurFade delay={1.4}>
+                      <FormDescription>Choose your package manager.</FormDescription>
+                    </BlurFade>
                     <FormControl>
                       <div className="flex gap-4 justify-evenly">
                         {Object.values(CLIs).map((x, i) => (
-                          <Button
-                            key={i}
-                            type="button"
-                            onClick={() => form.setValue("cli", x)}
-                            variant={form.getValues().cli === x ? "destructive" : "secondary"}
-                            data-state={form.getValues().cli === x ? "active" : "inactive"}
-                            {...field}
-                          >
-                            {x}
-                          </Button>
+                          <BlurFade key={i} delay={1.5 + (i + 1) / 10}>
+                            <Button
+                              type="button"
+                              onClick={() => form.setValue("cli", x)}
+                              variant={form.getValues().cli === x ? "destructive" : "secondary"}
+                              data-state={form.getValues().cli === x ? "active" : "inactive"}
+                              {...field}
+                            >
+                              {x}
+                            </Button>
+                          </BlurFade>
                         ))}
                       </div>
                     </FormControl>
@@ -233,34 +257,25 @@ export default function Home() {
                 )}
               />
               <div>
-                <Button
-                  type="button"
-                  onClick={() => setIsAdvanced(!isAdvanced)}
-                  variant={"link"}
-                  className="p-0"
-                >
-                  <h3 className="inline-flex items-center font-semibold leading-none text-xs sm:text-sm group">
-                    Advanced options
-                    <ChevronRightIcon
-                      className={cn(
-                        "size-4 translate-x-0 transform opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100",
-                        isAdvanced ? "rotate-90" : "rotate-0",
-                      )}
-                    />
-                  </h3>
-                </Button>
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{
-                    opacity: isAdvanced ? 1 : 0,
-                    height: isAdvanced ? "auto" : 0,
-                  }}
-                  transition={{
-                    duration: 0.7,
-                    ease: [0.16, 1, 0.3, 1],
-                  }}
-                  className="mt-2 text-xs sm:text-sm"
-                >
+                <BlurFade delay={1.9}>
+                  <Button
+                    type="button"
+                    onClick={() => setIsAdvanced(!isAdvanced)}
+                    variant={"link"}
+                    className="p-0"
+                  >
+                    <h3 className="inline-flex items-center font-semibold leading-none text-xs sm:text-sm group">
+                      Advanced options
+                      <ChevronRightIcon
+                        className={cn(
+                          "size-4 translate-x-0 transform opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100",
+                          isAdvanced ? "rotate-90" : "rotate-0",
+                        )}
+                      />
+                    </h3>
+                  </Button>
+                </BlurFade>
+                <DropdownDiv bool={isAdvanced} className="text-xs sm:text-sm">
                   <CheckboxFormField
                     name="shadcnUi"
                     label={"Add Shadcn/UI"}
@@ -280,36 +295,40 @@ export default function Home() {
                     disabled={form.getValues("shadcnUi")}
                     form={form}
                   />
-                </motion.div>
+                </DropdownDiv>
               </div>
-              <div className="flex w-full items-center gap-2 min-h-28 relative">
-                <Textarea disabled value={command} className="resize-none" />
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      size={"icon"}
-                      type="button"
-                      variant={"outline"}
-                      onClick={() => navigator.clipboard.writeText(command)}
-                    >
-                      <Copy className="size-4" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>Copy command</TooltipContent>
-                </Tooltip>
-              </div>
-              <Button
-                type="submit"
-                disabled={isLoading}
-                className=" transition-all w-full flex mx-auto disabled:scale-90"
-              >
-                Generate
-              </Button>
+              <BlurFade delay={2}>
+                <div className="flex w-full items-center gap-2 min-h-28 relative">
+                  <Textarea disabled value={command} className="resize-none" />
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        size={"icon"}
+                        type="button"
+                        variant={"outline"}
+                        onClick={() => navigator.clipboard.writeText(command)}
+                      >
+                        <Copy className="size-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>Copy command</TooltipContent>
+                  </Tooltip>
+                </div>
+              </BlurFade>
+              <BlurFade delay={2.1}>
+                <Button
+                  type="submit"
+                  disabled={isLoading}
+                  className=" transition-all w-full flex mx-auto disabled:scale-90"
+                >
+                  Generate
+                </Button>
+              </BlurFade>
             </form>
           </Form>
         </div>
       </div>
-      <div className="w-1/3 hidden md:block">
+      <BlurFade className="w-1/3 hidden md:block">
         <Tree
           initialExpandedItems={Array.from({ length: 31 }, (_, i) => i.toString())}
           className="font-medium"
@@ -325,7 +344,7 @@ export default function Home() {
             shadcUi={form.getValues().shadcnUi}
           />
         </Tree>
-      </div>
+      </BlurFade>
       <Dock />
     </div>
   );
