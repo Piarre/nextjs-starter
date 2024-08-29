@@ -41,13 +41,14 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta property="og:description" content={metadata.description as string} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={metadata.openGraph?.url as string} />
+        <meta property="og:image" content="https://start.piarre.app/icon.png" />
         {/* Twitter */}
         {/* <meta name="twitter:card" content="summary" />
         <meta name="twitter:site" content="@Oxie" />
         <meta name="twitter:title" content="Oxie" />
         <meta name="twitter:description" content={metadata.description as string} />
         <meta name="twitter:image" content="https://start.piarre.app/" /> */}
-        
+
         {/* Google Search Console */}
         <meta
           name="google-site-verification"
