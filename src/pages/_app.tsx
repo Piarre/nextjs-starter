@@ -11,8 +11,9 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const metadata: Metadata = {
   title: "NextJS Starter",
-  description: "A NextJS starter.",
-  keywords: "NextJS, Shadcn UI, Shadcn, Starter, Next, React",
+  description: "Create NextJS apps with Shadcn UI and TailwindCSS within seconds.",
+  keywords:
+    "NextJS, Shadcn UI, Shadcn, Starter, Next, React, Start, Typescript, Template, TailwndCSS",
   openGraph: {
     url: "https://start.piarre.app/",
   },
