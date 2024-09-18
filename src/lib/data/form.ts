@@ -1,6 +1,7 @@
 import { z } from "zod";
 import regex from "./regex";
 import { CLIs } from "../types/cli";
+import { Item } from "../types/form";
 
 export const NextStarterFormSchema = z.object({
   name: z.string().min(1).regex(regex.name, {
@@ -18,3 +19,13 @@ export const NextStarterFormSchema = z.object({
   cli: z.enum(CLIs),
   shadcnUi: z.boolean(),
 });
+
+export const Items: Item[] = [
+  { name: "app", label: "App", description: "Initialize as an App Router project." },
+  {
+    name: "srcDir",
+    label: "Source directory (src)",
+    description: "Initialize with a src directory.",
+  },
+  { name: "eslint", label: "ESLint", description: "Initialize with ESLint config" },
+] as const;

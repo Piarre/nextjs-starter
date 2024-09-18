@@ -17,7 +17,7 @@ import { useEffect, useState } from "react";
 import { cn, CreateCommand } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { NextStarterFormSchema } from "@/lib/data/form";
+import { Items, NextStarterFormSchema } from "@/lib/data/form";
 import CheckboxFormField from "@/components/checkbox-form-field";
 import { Tree } from "@/components/magicui/file-tree";
 import regex from "@/lib/data/regex";
@@ -31,16 +31,6 @@ import { ChevronRightIcon, Copy, RotateCcw } from "lucide-react";
 import BlurFade from "@/components/magicui/blur-fade";
 import DropdownDiv from "@/components/dropdown-div";
 import BlurFadeText from "@/components/magicui/blur-fade-text";
-
-const Items = [
-  { name: "app", label: "App", description: "Initialize as an App Router project." },
-  {
-    name: "srcDir",
-    label: "Source directory (src)",
-    description: "Initialize with a src directory.",
-  },
-  { name: "eslint", label: "ESLint", description: "Initialize with ESLint config" },
-] as const;
 
 export default function Home() {
   const [command, setCommand] = useState<string>("");
@@ -87,7 +77,7 @@ export default function Home() {
 
   useEffect(() => {
     const isAPIAvailable = async () => {
-      return await fetch("https://next-starter-api.piarre.app/md5dn").then((res) => {
+      return await fetch("https://next-starter-api.piarre.app/md5").then((res) => {
         switch (res.status) {
           case 200:
             break;
