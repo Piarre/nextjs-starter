@@ -45,8 +45,8 @@ const Items = [
 export default function Home() {
   const [command, setCommand] = useState<string>("");
   const [isAdvanced, setIsAdvanced] = useState<boolean>(false);
+  const [isAPIOnline, setisAPIOnline] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
   const [settings, setSettings] = useLocalStorage<Omit<Settings, "name">>(
     "settings",
     defaultSettings,
@@ -85,6 +85,36 @@ export default function Home() {
     });
   }, [form, setSettings]);
 
+  useEffect(() => {
+    const isAPIAvailable = async () => {
+      return await fetch("https://next-starter-api.piarre.app/md5dn").then((res) => {
+        switch (res.status) {
+          case 200:
+            break;
+          case 204:
+            break;
+          case 404:
+            setisAPIOnline(false);
+            toast.error("API is currently not availabe", {
+              description: "Only generated command is available.",
+              action: {
+                label: "Status",
+                onClick: () => window.open("https://status.start.piarre.app", "_blank"),
+              },
+              duration: 3000,
+              closeButton: true,
+            });
+            break;
+          default:
+            setisAPIOnline(false);
+            break;
+        }
+      });
+    };
+
+    isAPIAvailable();
+  }, []);
+
   const onSubmit = async (values: z.infer<typeof NextStarterFormSchema>) => {
     setCommand(CreateCommand(values));
     setIsLoading(true);
@@ -116,7 +146,7 @@ export default function Home() {
         <div className="max-w-2xl mx-auto">
           <div className="grid justify-center items-center pb-4">
             <BlurFadeText text="Kepa's starter" className="text-4xl font-bold" />
-            <BlurFadeText  text="Beta" className="text-xl font-bold bg-primary" />
+            <BlurFadeText text="Beta" className="text-xl font-bold bg-primary" />
           </div>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} autoComplete="off" className="space-y-4">
@@ -318,7 +348,7 @@ export default function Home() {
               <BlurFade delay={2.1}>
                 <Button
                   type="submit"
-                  disabled={isLoading}
+                  disabled={isLoading || !isAPIOnline}
                   className=" transition-all w-full flex mx-auto disabled:scale-90"
                 >
                   Generate
