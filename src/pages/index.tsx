@@ -17,7 +17,7 @@ import { useEffect, useState } from "react";
 import { cn, CreateCommand } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { Items, NextStarterFormSchema } from "@/lib/data/form";
+import { Items, NextStarterFormSchema, UnvailableToastAPI } from "@/lib/data/form";
 import CheckboxFormField from "@/components/checkbox-form-field";
 import { Tree } from "@/components/magicui/file-tree";
 import regex from "@/lib/data/regex";
@@ -77,28 +77,14 @@ export default function Home() {
 
   useEffect(() => {
     const isAPIAvailable = async () => {
-      return await fetch("https://next-starter-api.piarre.app/md5").then((res) => {
-        switch (res.status) {
-          case 200:
-            break;
-          case 204:
-            break;
-          case 404:
-            setisAPIOnline(false);
-            toast.error("API is currently not availabe", {
-              description: "Only generated command is available.",
-              action: {
-                label: "Status",
-                onClick: () => window.open("https://status.start.piarre.app", "_blank"),
-              },
-              duration: 3000,
-              closeButton: true,
-            });
-            break;
-          default:
-            break;
-        }
-      });
+      const setIsOffline = () => {
+        setisAPIOnline(false);
+        UnvailableToastAPI();
+      };
+
+      return await fetch("https://next-starter-api.piarre.app/debug/healthcheck")
+        .then((res) => !res.ok && setIsOffline())
+        .catch(() => setIsOffline());
     };
 
     isAPIAvailable();
@@ -337,7 +323,7 @@ export default function Home() {
               <BlurFade delay={2.1}>
                 <Button
                   type="submit"
-                  disabled={isLoading || !isAPIOnline}
+                  disabled={isLoading || isAPIOnline}
                   className=" transition-all w-full flex mx-auto disabled:scale-90"
                 >
                   Generate
