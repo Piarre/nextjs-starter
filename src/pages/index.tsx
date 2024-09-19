@@ -96,7 +96,6 @@ export default function Home() {
             });
             break;
           default:
-            setisAPIOnline(false);
             break;
         }
       });
