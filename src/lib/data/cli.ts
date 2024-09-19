@@ -8,10 +8,10 @@ const NextCMD: CMD = {
 } as const;
 
 const ShadcnCMD: CMD = {
-  npm: "npx shadcn-ui@latest init --defaults",
-  yarn: "npx shadcn-ui@latest init --defaults",
-  pnpm: "pnpm dlx shadcn-ui@latest init --defaults",
-  bun: "bunx --bun shadcn-ui@latest init --defaults",
+  npm: "npx shadcn@latest init --defaults",
+  yarn: "npx shadcn@latest init --defaults",
+  pnpm: "pnpm dlx shadcn@latest init --defaults",
+  bun: "bunx --bun shadcn@latest init --defaults",
 } as const;
 
 export { NextCMD, ShadcnCMD };
