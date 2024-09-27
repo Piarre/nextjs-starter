@@ -1,3 +1,6 @@
+> [!NOTE]
+> Depracted, you can use the commadn `bunx --bun shadcn@latest init`
+
 NextJS Starter
 
 Easily start a Next.js project with this starter.
